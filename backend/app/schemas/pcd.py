@@ -5,6 +5,10 @@ from pydantic import BaseModel
 
 
 class PCDBase(BaseModel):
+    class Config:
+        orm_mode = True
+
+class PCD_attribute(PCDBase):
     pcd_lat : Optional[float] = None
     pcd_long : Optional[float] = None
     pcd_date_aq : Optional[date] = None
@@ -13,6 +17,3 @@ class PCDBase(BaseModel):
     pcd_aqi : Optional[int] = None
     pcd_ground : Optional[bool] = None
     pcd_mobile : Optional[bool] = None
-    
-    class Config:
-        orm_mode = True
