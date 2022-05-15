@@ -8,7 +8,7 @@ class PCDBase(BaseModel):
     class Config:
         orm_mode = True
 
-class PCD_attribute(PCDBase):
+class PCDAttribute(PCDBase):
     pcd_lat : Optional[float] = None
     pcd_long : Optional[float] = None
     pcd_date_aq : Optional[date] = None
