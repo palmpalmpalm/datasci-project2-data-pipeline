@@ -9,8 +9,8 @@ class SFA(Base):
     sfa_humid = Column(Float)
     sfa_pm25_corrected = Column(Float)
     sfa_pm10_corrected = Column(Float)
-    pcd_lat = Column(RealQuantity)
-    pcd_long = Column(RealQuantity)
+    sfa_lat = Column(RealQuantity)
+    sfa_long = Column(RealQuantity)
 
     
     
