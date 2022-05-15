@@ -6,8 +6,8 @@ from datetime import date
 
 
 def insert_pcd(request:PCDBase, db:Session):
-    db_pcd = PCD(pcd_lat = request.lat,
-                 pcd_long = request.long,
+    db_pcd = PCD(pcd_lat = request.pcd_lat,
+                 pcd_long = request.pcd_long,
                  pcd_date_aq = request.pcd_date_aq,
                  pcd_pm25 = request.pcd_pm25,
                  pcd_PM10 = request.pcd_PM10,
@@ -16,11 +16,11 @@ def insert_pcd(request:PCDBase, db:Session):
                  pcd_mobile = request.pcd_mobile)
     db.add(db_pcd)
     db.commit()
-    db.refresh()
+    db.refresh(db_pcd)
     return db_pcd
 
 def get_pcd_by_date(datetime:date, db:Session):
-    pass
+    return db.query(PCD).all()
 
 def get_pcd_by_range_date(from_date:date, til_date:date, db:Session):
     pass
