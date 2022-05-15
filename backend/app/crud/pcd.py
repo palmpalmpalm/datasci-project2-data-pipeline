@@ -5,7 +5,7 @@ from app.schemas.pcd import PCDBase
 from datetime import date
 
 
-def add_pcd(request:PCDBase, db:Session):
+def insert_pcd(request:PCDBase, db:Session):
     db_pcd = PCD(pcd_lat = request.lat,
                  pcd_long = request.long,
                  pcd_date_aq = request.pcd_date_aq,
@@ -17,6 +17,7 @@ def add_pcd(request:PCDBase, db:Session):
     db.add(db_pcd)
     db.commit()
     db.refresh()
+    return db_pcd
 
 def get_pcd_by_date(datetime:date, db:Session):
     pass
