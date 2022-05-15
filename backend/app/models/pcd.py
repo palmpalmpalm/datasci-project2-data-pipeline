@@ -7,8 +7,8 @@ class PCD(Base):
     __tablename__ = "pcd"
     
     pcd_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    pcd_lat = Column(RealQuantity)
-    pcd_long = Column(RealQuantity)
+    pcd_lat = Column(Float)
+    pcd_long = Column(Float)
     pcd_date_aq = Column(Date)
     pcd_pm25 = Column(Float)
     pcd_PM10 = Column(Float)
