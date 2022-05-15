@@ -19,8 +19,11 @@ def insert_pcd(request:PCDBase, db:Session):
     db.refresh(db_pcd)
     return db_pcd
 
-def get_pcd_by_date(datetime:date, db:Session):
+def get_all_pcd(db: Session):
     return db.query(PCD).all()
+
+def get_pcd_by_date(datetime:date, db:Session):
+    pass
 
 def get_pcd_by_range_date(from_date:date, til_date:date, db:Session):
     pass
