@@ -6,11 +6,12 @@ Data pipeline for data science project 2 [auto scrape + insert/query api]
 - airflow
 
 ## Follow these steps
-download docker <br>
-cd to those directories <br>
-run this command <br>
+1. download docker engine<br>
+2. cd to those directories <br>
+3. rename .env.example to .env and config your own secrets in .env <br>
+4. run this command <br>
 ```
 docker-compose up -d
 ```
-checkout airflow server at locolhost:8000 <br>
-checkout backend server at locolhost:8080/docs
+checkout airflow server at localhost:8000 <br>
+checkout backend server at localhost:8080/docs
