@@ -10,7 +10,7 @@ args = {
 }
 
 
-dag = DAG(dag_id='my_test_dag', default_args=args, schedule_interval='*/1 * * * *', description='my test DAG',catchup=False) # run every 1 minute
+dag = DAG(dag_id='my_test_dag2', default_args=args, schedule_interval='*/1 * * * *', description='my test DAG',catchup=False) # run every 1 minute
 
 def run_this_func():
     print('hi')
