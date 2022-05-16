@@ -15,7 +15,15 @@ def run_this_func(**context):
 
 with dag:
     run_this_task = PythonOperator(
-        task_id='run_this',
-        python_callable=run_this_func,
-        provide_context=True        
+        task_id = 'run_this',
+        python_callable = run_this_func,
+        provide_context = True        
     )
+    
+    run_this_task2 = PythonOperator(
+        task_id = 'run_this2',
+        python_callable = run_this_func,
+        provide_context = True
+    )
+    
+    run_this_task >> run_this_task2
