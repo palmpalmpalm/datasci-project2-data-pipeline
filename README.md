@@ -2,8 +2,8 @@
 Data pipeline for data science project 2 [auto scrape + insert/query api]
 
 ## There are two directories.
-- Backend [fastapi + postgresql]
-- Airflow
+- backend [fastapi + postgresql]
+- airflow
 
 ## Follow these steps
 download docker <br>
