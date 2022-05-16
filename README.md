@@ -1,11 +1,11 @@
 # datasci-project2-data-pipeline
 Data pipeline for data science project 2 [auto scrape + insert/query api]
 
-## There are two directories.
+## There are two directories
 - backend [fastapi + postgresql]
 - airflow
 
-## Follow these steps
+## Follow these steup steps
 1. download docker engine<br>
 2. cd to those directories <br>
 3. rename .env.example to .env and config your own secrets in .env <br>
