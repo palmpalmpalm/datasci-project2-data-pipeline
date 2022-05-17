@@ -73,10 +73,6 @@ RUN set -ex \
         /usr/share/doc \
         /usr/share/doc-base
 
-# Install python requirements
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
 
@@ -86,5 +82,11 @@ EXPOSE 8080 5555 8793
 
 USER airflow
 WORKDIR ${AIRFLOW_USER_HOME}
+
+# Install python requirements
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY . .
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["webserver"]
