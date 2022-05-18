@@ -20,8 +20,8 @@ app = FastAPI()
 
 # Data schema
 class Data(BaseModel):
-    test_int: int
-    test_float: float
+    demo_int: int
+    demo_float: float
 
 # Demo model class
 class DemoModel:
