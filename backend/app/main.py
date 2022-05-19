@@ -14,16 +14,11 @@ SFA.metadata.create_all(bind=engine)
 Traffic.metadata.create_all(bind=engine)
 EarthNull.metadata.create_all(bind=engine)
 
-app = FastAPI()
+
+app = FastAPI(title='Data Sciene Project 2 Database Management')
 
 app.include_router(pcd.router)
 app.include_router(sfa.router)
 app.include_router(traffic.router)
 app.include_router(earthnull.router)
-
-
-@app.get("/hello")
-def hello():
-    return "hello world"
-
 

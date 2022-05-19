@@ -8,7 +8,7 @@ from app.crud.earthnull import insert_earthnull, get_all_earthnull
 
 router = APIRouter(
     prefix = "/earthnull",
-    tags = ['EarthNull'],
+    tags = ["EarthNull"],
     responses = {404 : {'message' : 'Not found'}}
 )
 
