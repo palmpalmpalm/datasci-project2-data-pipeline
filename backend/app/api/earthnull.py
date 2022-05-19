@@ -23,10 +23,10 @@ async def insert_earthnull_data(request:EarthNullAttribute, db:Session = Depends
 async def get_all_earthnull_data(db:Session = Depends(get_db)):
     return get_all_earthnull(db)
 
-@router.get("/all-by-station/{param}")
-async def get_all_earthnull_data_by_station(param:str, db:Session = Depends(get_db)):
-    return get_all_earthnull_by_station(param, db)
+@router.get("/all-by-station/stations/{station_id}")
+async def get_all_earthnull_data_by_station(station_id:str, db:Session = Depends(get_db)):
+    return get_all_earthnull_by_station(station_id, db)
 
-@router.get("/latest-by-station/{param}")
-async def get_latest_earthnull_data_by_station(param:str, db:Session = Depends(get_db)):
-    return get_latest_earthnull_by_station(param, db)
+@router.get("/latest-by-station/stations/{station_id}")
+async def get_latest_earthnull_data_by_station(station_id:str, db:Session = Depends(get_db)):
+    return get_latest_earthnull_by_station(station_id, db)
