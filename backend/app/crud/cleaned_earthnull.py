@@ -32,12 +32,6 @@ def get_latest_cleaned_earthnull_by_station(station_id:str, db:Session):
 def get_n_latest_cleaned_earthnull_by_station(n_limits:int, station_id:str, db:Session):
     return db.query(CleanedEarthNull).filter(CleanedEarthNull.cleaned_earthnull_station_id == station_id).order_by(CleanedEarthNull.cleaned_earthnull_timestamp.desc()).limit(n_limits).all()
 
-
-def get_cleaned_earthnull_by_date(datetime:datetime, db:Session):
-    pass
-
-def get_cleaned_earthnull_by_range_date(from_date:datetime, til_date:datetime, db:Session):
-    pass
-
-def get_cleaned_earthnull_by_date(datetime:datetime, db:Session):
-    pass
+def get_n_latest_pm25_cleaned_earthnull_by_station(n_limits:int, station_id:str, db:Session):
+    fields = ['cleaned_earthnull_station_id', 'cleaned_earthnull_pm25']
+    return db.query(CleanedEarthNull).filter(CleanedEarthNull.cleaned_earthnull_station_id == station_id).order_by(CleanedEarthNull.cleaned_earthnull_timestamp.desc()).options(load_only(*fields)).limit(n_limits).all()
