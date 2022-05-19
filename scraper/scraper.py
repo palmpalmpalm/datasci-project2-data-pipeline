@@ -9,8 +9,10 @@ from selenium.webdriver.common.by import By
 import datetime
 from typing import List, Optional
 from datetime import datetime
+import time
 from uuid import UUID
 from pydantic import BaseModel
+from sqlalchemy import null
 
 
 
@@ -57,14 +59,35 @@ def waiting(driver):
     while data_status.text=="Downloading...":
         data_status = driver.find_element(By.XPATH,'/html/body/main/div[3]/div[1]/div')
         if data_status.text=="Downloading...":
+            time.sleep(1)
             continue
         else :
             return
 
-def insert_data(data):
+def insert_scrape_data(data):
     url = 'http://localhost:8000/earthnull/insert'
     res = requests.post(url = url, json = data)
     print(res.json())
+
+def insert_cleaned_data(data):
+    url = 'http://localhost:8000/cleaned_earthnull/insert'
+    res = requests.post(url = url, json = data)
+    print(res.json())
+
+def get_lastest(station_id):
+    url = f'http://localhost:8000/cleaned_earthnull/latest-by-station/stations/{station_id}/limits/1'
+    res = requests.post(url = url)
+    return res.json()
+    
+def cleaned_data(data):
+    station_id = data.earthnull_station_id
+    lastest_data = get_lastest(station_id)
+    for key in data:
+        if data[key] == null:
+            data[key] = lastest_data[0][key]
+    insert_cleaned_data(data)
+    return "very_good"
+        
 
 def get_scrape_data():
     chrome_options = webdriver.ChromeOptions()
@@ -150,9 +173,10 @@ def get_scrape_data():
                 "earthnull_wind_speed": wind_speed,
                 "earthnull_RH": RH_data
             }
-            insert_data(data)
+            insert_scrape_data(data)
         hours_added = datetime.timedelta(hours = hours_step)
-        date_collect_temp = date_collect_temp + hours_added  
+        date_collect_temp = date_collect_temp + hours_added 
+ 
 
 
 # api for get lastest data -> inference the data -> insert prediction's result to database
