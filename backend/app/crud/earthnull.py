@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 def insert_earthnull(request:EarthNullAttribute, db:Session):
-    db_pcd = EarthNull(earthnull_station_id = request.earthnull_station_id,
+    db_earthnull = EarthNull(earthnull_station_id = request.earthnull_station_id,
                        earthnull_timestamp = request.earthnull_timestamp,
                        earthnull_lat = request.earthnull_lat,
                        earthnull_long = request.earthnull_long,
@@ -15,10 +15,10 @@ def insert_earthnull(request:EarthNullAttribute, db:Session):
                        earthnull_wind_dir = request.earthnull_wind_dir,
                        earthnull_wind_speed = request.earthnull_wind_speed,
                        earthnull_RH = request.earthnull_RH)
-    db.add(db_pcd)
+    db.add(db_earthnull)
     db.commit()
-    db.refresh(db_pcd)
-    return db_pcd
+    db.refresh(db_earthnull)
+    return db_earthnull
 
 def get_all_earthnull(db:Session):
     return db.query(EarthNull).all()
