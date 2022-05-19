@@ -23,6 +23,6 @@ async def insert_predicted_data(request:PredictedAttribute, db:Session = Depends
 async def get_all_predicted_data(db:Session = Depends(get_db)):
     return get_all_predicted(db)
 
-@router.get("/latest-by-station/{param}")
-async def get_latest_predicted_data_by_station(param:str, db:Session = Depends(get_db)):
-    return get_latest_predicted_by_station(param, db)
+@router.get("/latest-by-station/stations/{station_id}")
+async def get_latest_predicted_data_by_station(station_id:str, db:Session = Depends(get_db)):
+    return get_latest_predicted_by_station(station_id, db)
