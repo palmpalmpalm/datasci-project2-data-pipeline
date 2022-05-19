@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from app.database import init_db
 from sqlalchemy.orm import Session
 from app.schemas.cleaned_earthnull import CleanedEarthNullAttribute
-from app.crud.cleaned_earthnull import insert_cleaned_earthnull, get_all_cleaned_earthnull, get_latest_cleaned_earthnull_by_station, get_all_cleaned_earthnull_by_station, get_n_latest_cleaned_earthnull_by_station, get_n_latest_pm25_cleaned_earthnull_by_station
+from app.crud.cleaned_earthnull import insert_cleaned_earthnull, get_all_cleaned_earthnull, get_latest_cleaned_earthnull_by_station, get_all_cleaned_earthnull_by_station, get_n_latest_cleaned_earthnull_by_station
 
 
 router = APIRouter(
@@ -34,8 +34,4 @@ async def get_latest_cleaned_earthnull_data_by_station(station_id:str, db:Sessio
 @router.get("/latest-by-station/stations/{station_id}/limits/{n_limits}")
 async def get_n_latest_cleaned_earthnull_data_by_station(station_id:str, n_limits:int, db:Session = Depends(get_db)):
     return get_n_latest_cleaned_earthnull_by_station(n_limits, station_id, db)
-
-@router.get("/latest-pm25-by-station/stations/{station_id}/limits/{n_limits}")
-async def get_n_latest_cleaned_earthnull_data_by_station(station_id:str, n_limits:int, db:Session = Depends(get_db)):
-    return get_n_latest_pm25_cleaned_earthnull_by_station(n_limits, station_id, db)
 
