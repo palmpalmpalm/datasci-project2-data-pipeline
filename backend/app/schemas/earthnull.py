@@ -8,7 +8,7 @@ class EarthNullBase(BaseModel):
     class Config:
         orm_mode = True
 
-class PCDAttribute(EarthNullBase):    
+class EarthNullAttribute(EarthNullBase):    
     earthnull_timestamp : Optional[date] = None
     earthnull_station_id : Optional[str] = None
     earthnull_lat : Optional[float] = None

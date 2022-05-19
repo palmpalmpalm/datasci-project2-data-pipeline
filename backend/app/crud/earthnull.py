@@ -13,7 +13,6 @@ def insert_earthnull(request:EarthNullAttribute, db:Session):
                        earthnull_pm25 = request.earthnull_pm25,
                        earthnull_pm10 = request.earthnull_pm10,
                        earthnull_wind_dir = request.earthnull_wind_dir,
-                       earthnull_wind_dir = request.earthnull_wind_dir,
                        earthnull_wind_speed = request.earthnull_wind_speed,
                        earthnull_RH = request.earthnull_RH)
     db.add(db_pcd)
@@ -21,14 +20,14 @@ def insert_earthnull(request:EarthNullAttribute, db:Session):
     db.refresh(db_pcd)
     return db_pcd
 
-def get_all_pcd(db: Session):
+def get_all_earthnull(db: Session):
     return db.query(EarthNull).all()
 
-def get_pcd_by_date(datetime:date, db:Session):
+def get_earthnull_by_date(datetime:date, db:Session):
     pass
 
-def get_pcd_by_range_date(from_date:date, til_date:date, db:Session):
+def get_earthnull_by_range_date(from_date:date, til_date:date, db:Session):
     pass
 
-def get_pm25_by_date(datetime:date, db:Session):
+def get_earthnull_by_date(datetime:date, db:Session):
     pass
