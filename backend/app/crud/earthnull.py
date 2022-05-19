@@ -23,6 +23,9 @@ def insert_earthnull(request:EarthNullAttribute, db:Session):
 def get_all_earthnull(db:Session):
     return db.query(EarthNull).all()
 
+def get_all_earthnull_by_station(db:Session):
+    pass
+
 def get_latest_earthnull(db:Session):
     return 
 
