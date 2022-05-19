@@ -16,6 +16,7 @@ class EarthNull(Base):
     earthnull_long = Column(Float)
     earthnull_pm25 = Column(Float)
     earthnull_pm10 = Column(Float)
+    earthnull_temp = Column(Float)
     earthnull_wind_dir = Column(Integer)
     earthnull_wind_speed = Column(Integer)
     earthnull_RH = Column(Integer)

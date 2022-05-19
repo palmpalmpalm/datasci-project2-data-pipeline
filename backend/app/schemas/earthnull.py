@@ -18,6 +18,7 @@ class EarthNullAttribute(EarthNullBase):
     earthnull_long : Optional[float] = None
     earthnull_pm25 : Optional[float] = None
     earthnull_pm10 : Optional[float] = None
+    earthnull_temp : Optional[float] = None
     earthnull_wind_dir : Optional[int] = None
     earthnull_wind_speed : Optional[int] = None
     earthnull_RH : Optional[int] = None

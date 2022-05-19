@@ -12,6 +12,7 @@ def insert_cleaned_earthnull(request:CleanedEarthNullAttribute, db:Session):
                        cleaned_earthnull_long = request.cleaned_earthnull_long,
                        cleaned_earthnull_pm25 = request.cleaned_earthnull_pm25,
                        cleaned_earthnull_pm10 = request.cleaned_earthnull_pm10,
+                       cleaned_earthnull_temp = request.cleaned_earthnull_temp,
                        cleaned_earthnull_wind_dir = request.cleaned_earthnull_wind_dir,
                        cleaned_earthnull_wind_speed = request.cleaned_earthnull_wind_speed,
                        cleaned_earthnull_RH = request.cleaned_earthnull_RH)

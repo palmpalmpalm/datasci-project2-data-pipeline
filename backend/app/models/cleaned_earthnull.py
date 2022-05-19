@@ -16,6 +16,7 @@ class CleanedEarthNull(Base):
     cleaned_earthnull_long = Column(Float)
     cleaned_earthnull_pm25 = Column(Float)
     cleaned_earthnull_pm10 = Column(Float)
+    cleaned_earthnull_temp = Column(Float)
     cleaned_earthnull_wind_dir = Column(Integer)
     cleaned_earthnull_wind_speed = Column(Integer)
     cleaned_earthnull_RH = Column(Integer)

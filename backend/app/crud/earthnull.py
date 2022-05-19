@@ -12,6 +12,7 @@ def insert_earthnull(request:EarthNullAttribute, db:Session):
                        earthnull_long = request.earthnull_long,
                        earthnull_pm25 = request.earthnull_pm25,
                        earthnull_pm10 = request.earthnull_pm10,
+                       earthnull_temp = request.earthnull_temp,
                        earthnull_wind_dir = request.earthnull_wind_dir,
                        earthnull_wind_speed = request.earthnull_wind_speed,
                        earthnull_RH = request.earthnull_RH)
