@@ -1,4 +1,4 @@
-from sqlalchemy import  Column, String, Date, Float, Integer, Boolean
+from sqlalchemy import  Column, String, DateTime, Float, Integer, Boolean
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 from ..database.init_db import Base
@@ -8,7 +8,7 @@ class EarthNull(Base):
     
     earthnull_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     earthnull_station_id = Column(String)
-    earthnull_timestamp = Column(Date)    
+    earthnull_timestamp = Column(DateTime)    
     earthnull_lat = Column(Float)
     earthnull_long = Column(Float)
     earthnull_pm25 = Column(Float)

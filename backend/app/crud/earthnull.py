@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session ,load_only
 from app.models.earthnull import EarthNull
 from app.schemas.earthnull import EarthNullAttribute
-from datetime import date
+from datetime import datetime
 
 
 def insert_earthnull(request:EarthNullAttribute, db:Session):
@@ -20,14 +20,17 @@ def insert_earthnull(request:EarthNullAttribute, db:Session):
     db.refresh(db_pcd)
     return db_pcd
 
-def get_all_earthnull(db: Session):
+def get_all_earthnull(db:Session):
     return db.query(EarthNull).all()
 
-def get_earthnull_by_date(datetime:date, db:Session):
+def get_latest_earthnull(db:Session):
+    return 
+
+def get_earthnull_by_date(datetime:datetime, db:Session):
     pass
 
-def get_earthnull_by_range_date(from_date:date, til_date:date, db:Session):
+def get_earthnull_by_range_date(from_date:datetime, til_date:datetime, db:Session):
     pass
 
-def get_earthnull_by_date(datetime:date, db:Session):
+def get_earthnull_by_date(datetime:datetime, db:Session):
     pass
