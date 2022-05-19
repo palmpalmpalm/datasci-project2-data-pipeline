@@ -12,9 +12,9 @@ services:
                 max-file: "3"
 
     webserver:
-        # image: puckel/docker-airflow:1.10.9
-        build:
-            context: ./
+        image: puckel/docker-airflow:1.10.9
+        # build:
+        #     context: ./
         restart: always
         depends_on:
             - postgres
@@ -30,7 +30,8 @@ services:
             # - ./plugins:/usr/local/airflow/plugins
         ports:
             - "8080:8080"
-        command: webserver
+        command: 
+            - webserver
         healthcheck:
             test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
             interval: 30s
