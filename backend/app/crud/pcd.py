@@ -10,7 +10,7 @@ def insert_pcd(request:PCDAttribute, db:Session):
                  pcd_long = request.pcd_long,
                  pcd_date_aq = request.pcd_date_aq,
                  pcd_pm25 = request.pcd_pm25,
-                 pcd_PM10 = request.pcd_PM10,
+                 pcd_pm10 = request.pcd_pm10,
                  pcd_aqi = request.pcd_aqi,
                  pcd_ground = request.pcd_ground,
                  pcd_mobile = request.pcd_mobile)

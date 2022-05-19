@@ -11,7 +11,7 @@ class PCD(Base):
     pcd_long = Column(Float)
     pcd_date_aq = Column(Date)
     pcd_pm25 = Column(Float)
-    pcd_PM10 = Column(Float)
+    pcd_pm10 = Column(Float)
     pcd_aqi = Column(Integer)
     pcd_ground = Column(Boolean)
     pcd_mobile = Column(Boolean)
