@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  selenium:
+    images: selenium/standalone-chrome
+    ports:
+      - 4444:4444
+    restart: always
