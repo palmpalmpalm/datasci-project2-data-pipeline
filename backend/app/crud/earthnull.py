@@ -23,11 +23,11 @@ def insert_earthnull(request:EarthNullAttribute, db:Session):
 def get_all_earthnull(db:Session):
     return db.query(EarthNull).all()
 
-def get_all_earthnull_by_station(db:Session):
-    pass
+def get_all_earthnull_by_station(station_id:str, db:Session):
+    return db.query(EarthNull).filter(EarthNull.earthnull_station_id == station_id).order_by(EarthNull.earthnull_timestamp.desc()).all()
 
-def get_latest_earthnull(db:Session):
-    return 
+def get_latest_earthnull_by_station(station_id:str, db:Session):
+    return db.query(EarthNull).filter(EarthNull.earthnull_station_id == station_id).order_by(EarthNull.earthnull_timestamp.desc()).first()
 
 def get_earthnull_by_date(datetime:datetime, db:Session):
     pass

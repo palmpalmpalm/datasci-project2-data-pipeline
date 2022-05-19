@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from app.database import init_db
 from sqlalchemy.orm import Session
 from app.schemas.earthnull import EarthNullAttribute
-from app.crud.earthnull import insert_earthnull, get_all_earthnull
+from app.crud.earthnull import insert_earthnull, get_all_earthnull, get_latest_earthnull_by_station, get_all_earthnull_by_station
 
 
 router = APIRouter(
@@ -22,3 +22,11 @@ async def insert_earthnull_data(request:EarthNullAttribute, db:Session = Depends
 @router.get("/all", response_model = List[EarthNullAttribute])
 async def get_all_earthnull_data(db:Session = Depends(get_db)):
     return get_all_earthnull(db)
+
+@router.get("/all-by-station/{param}")
+async def get_all_earthnull_data_by_station(param:str, db:Session = Depends(get_db)):
+    return get_all_earthnull_by_station(param, db)
+
+@router.get("/latest-by-station/{param}")
+async def get_latest_earthnull_data_by_station(param:str, db:Session = Depends(get_db)):
+    return get_latest_earthnull_by_station(param, db)

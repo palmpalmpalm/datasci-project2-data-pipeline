@@ -8,7 +8,10 @@ class EarthNull(Base):
     
     earthnull_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     earthnull_station_id = Column(String)
-    earthnull_timestamp = Column(DateTime)    
+    earthnull_timestamp = Column(DateTime)
+    earthnull_station_name = Column(String)
+    earthnull_region = Column(String)
+    earthnull_province = Column(String)    
     earthnull_lat = Column(Float)
     earthnull_long = Column(Float)
     earthnull_pm25 = Column(Float)
