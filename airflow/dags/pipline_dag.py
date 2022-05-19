@@ -8,7 +8,6 @@ import random
 from dotenv import load_dotenv
 
 
-
 dotenv_path = os.path.join(os.path.dirname(
     os.path.dirname(os.path.dirname(__file__))), '.env')
 load_dotenv(dotenv_path)
@@ -20,9 +19,6 @@ POSTGRES_DB=os.environ.get("POSTGRES_DB")
 SCRAPER_ENDPOINT=os.environ.get("SCRAPER_ENDPOINT")
 SCRAPER_PORT=os.environ.get("SCRAPER_PORT")
 
-CLEANSING_ENDPOINT=os.environ.get("CLEANSING_ENDPOINT")
-CLEANSING_PORT=os.environ.get("CLEANSING_PORT")
-
 PREDICTOR_ENDPOINT=os.environ.get("PREDICTOR_ENDPOINT")
 PREDICTOR_PORT=os.environ.get("PREDICTOR_PORT")
 
@@ -33,11 +29,6 @@ args = {
     
 def trigger_scraper():
     url = f"http://{SCRAPER_ENDPOINT}:{SCRAPER_PORT}" # end point path + "/"
-    req = requests.get(url)
-    print(req.json())
-
-def trigger_cleansing():
-    url = f"http://{CLEANSING_ENDPOINT}:{CLEANSING_PORT}" # end point path + "/"
     req = requests.get(url)
     print(req.json())
 
@@ -58,14 +49,9 @@ with dag:
         python_callable = trigger_scraper,    
     )
     
-    cleansing = PythonOperator(
-        task_id = 'Clean raw scraped data and insert them to database',
-        python_callable = trigger_cleansing,
-    )
-    
     predicting = PythonOperator(
         task_id = 'Predict future PM2.5 with cleaned data and insert them to database',
         python_callable = trigger_predictor,
     )
     
-    scraping >> cleansing >> predicting
+    scraping >> predicting
