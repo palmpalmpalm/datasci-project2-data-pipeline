@@ -6,16 +6,19 @@ from datetime import datetime
 
 
 def insert_cleaned_earthnull(request:CleanedEarthNullAttribute, db:Session):
-    db_cleaned_earthnull =CleanedEarthNull(cleaned_earthnull_station_id = request.cleaned_earthnull_station_id,
-                       cleaned_earthnull_timestamp = request.cleaned_earthnull_timestamp,
-                       cleaned_earthnull_lat = request.cleaned_earthnull_lat,
-                       cleaned_earthnull_long = request.cleaned_earthnull_long,
-                       cleaned_earthnull_pm25 = request.cleaned_earthnull_pm25,
-                       cleaned_earthnull_pm10 = request.cleaned_earthnull_pm10,
-                       cleaned_earthnull_temp = request.cleaned_earthnull_temp,
-                       cleaned_earthnull_wind_dir = request.cleaned_earthnull_wind_dir,
-                       cleaned_earthnull_wind_speed = request.cleaned_earthnull_wind_speed,
-                       cleaned_earthnull_RH = request.cleaned_earthnull_RH)
+    db_cleaned_earthnull=CleanedEarthNull(cleaned_earthnull_timestamp = request.cleaned_earthnull_timestamp,
+                        cleaned_earthnull_station_id = request.cleaned_earthnull_station_id,
+                        cleaned_earthnull_station_name = request.cleaned_earthnull_station_name,
+                        cleaned_earthnull_region = request.cleaned_earthnull_region,
+                        cleaned_earthnull_province = request.cleaned_earthnull_province,                         
+                        cleaned_earthnull_lat = request.cleaned_earthnull_lat,
+                        cleaned_earthnull_long = request.cleaned_earthnull_long,
+                        cleaned_earthnull_pm25 = request.cleaned_earthnull_pm25,
+                        cleaned_earthnull_pm10 = request.cleaned_earthnull_pm10,
+                        cleaned_earthnull_temp = request.cleaned_earthnull_temp,
+                        cleaned_earthnull_wind_dir = request.cleaned_earthnull_wind_dir,
+                        cleaned_earthnull_wind_speed = request.cleaned_earthnull_wind_speed,
+                        cleaned_earthnull_RH = request.cleaned_earthnull_RH)
     db.add(db_cleaned_earthnull)
     db.commit()
     db.refresh(db_cleaned_earthnull)
