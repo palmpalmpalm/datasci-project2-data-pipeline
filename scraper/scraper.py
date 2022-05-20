@@ -60,28 +60,37 @@ def waiting(driver):
         
 
 def insert_scrape_data(data):
-    requests.adapters.DEFAULT_RETRIES = 100
-    s = requests.session()
-    s.keep_alive = False 
-    url = 'http://localhost:8000/earthnull/insert'
-    res = requests.post(url = url, json = data)
-    return res.json()
+    try:
+        requests.adapters.DEFAULT_RETRIES = 100
+        s = requests.session()
+        s.keep_alive = False 
+        url = 'http://localhost:8000/earthnull/insert'
+        res = requests.post(url = url, json = data)
+        return res.json()
+    except:
+        return
 
 def insert_cleaned_data(data):
-    requests.adapters.DEFAULT_RETRIES = 100
-    s = requests.session()
-    s.keep_alive = False 
-    url = 'http://localhost:8000/cleaned_earthnull/insert'
-    res = requests.post(url = url, json = data)
-    return res.json()
+    try:
+        requests.adapters.DEFAULT_RETRIES = 100
+        s = requests.session()
+        s.keep_alive = False 
+        url = 'http://localhost:8000/cleaned_earthnull/insert'
+        res = requests.post(url = url, json = data)
+        return res.json()
+    except:
+        return
 
 def get_lastest(station_id):
-    requests.adapters.DEFAULT_RETRIES = 100
-    s = requests.session()
-    s.keep_alive = False 
-    url = f'http://localhost:8000/cleaned_earthnull/latest-by-station/stations/{station_id}/limits/1'
-    res = requests.get(url = url)
-    return res.json()
+    try:
+        requests.adapters.DEFAULT_RETRIES = 100
+        s = requests.session()
+        s.keep_alive = False 
+        url = f'http://localhost:8000/cleaned_earthnull/latest-by-station/stations/{station_id}/limits/1'
+        res = requests.get(url = url)
+        return res.json()
+    except:
+        return
     
 def cleaned_data(datas):
     positions = [(99.823357, 19.909242), (98.9881062, 18.7909205), (99.659873, 18.282664), (99.893048, 19.200226), (100.776359, 18.788878), (102.780926, 17.414174), (104.133216, 17.15662), (102.835251, 16.445329), (98.918138, 8.059199), (104.094535, 17.191391), (102.098301, 14.979726), (99.123056, 16.883611), (100.110542, 15.686254), (100.258056, 16.820833), (99.325355, 9.126057), (100.48404, 7.020545), (99.961469, 8.426923), (99.588743, 7.570238), (101.2831, 6.546197), (100.536443, 13.729984), (100.343164, 13.705582), (100.784069, 13.72205), (100.558606, 13.7619223), (100.785866, 13.570333), (101.286359, 13.588554), (100.977777, 13.355065), (101.098128, 13.054551), (101.180975, 12.706325), (102.523721, 12.234862)]
