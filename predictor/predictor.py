@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi import status
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from tensorflow import keras
 import requests
 import os
@@ -11,16 +11,15 @@ from datetime import timedelta
 from datetime import datetime
 
 # Get data from .env
-dotenv_path = os.path.join(os.path.dirname(
-    os.path.dirname(os.path.dirname(__file__))), '.env')
+dotenv_path = os.path.join('.env')
 load_dotenv(dotenv_path)
 
 API_ENDPOINT = os.environ.get("API_ENDPOINT")
 API_PORT = os.environ.get("API_PORT")
 
 # Create database endpoint from .env
-# API_URL = f"http://{API_ENDPOINT}:{API_PORT}"
-API_URL = "http://localhost:8000"
+API_URL = f"http://{API_ENDPOINT}:{API_PORT}"
+# API_URL = "http://localhost:8000"
 
 # Init fastapi server
 app = FastAPI()

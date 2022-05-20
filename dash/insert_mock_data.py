@@ -62,5 +62,5 @@ if __name__ == '__main__':
         for i in range(1, 6):
             # insert_earthnull_data(str(i), name[i], lat[i], long[i])
             insert_cleaned_earthnull_data(str(i), name[i], lat[i], long[i])
-        time.sleep(2)
-        print('xx')
+        time.sleep(1)
+        print('------')
