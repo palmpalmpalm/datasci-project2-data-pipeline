@@ -27,18 +27,18 @@ args = {
 }
     
 def trigger_scraper():
-    url = f"http://{SCRAPER_ENDPOINT}:{SCRAPER_PORT}" # end point path + "/"
+    url = f"http://{SCRAPER_ENDPOINT}:{SCRAPER_PORT}" + "/scrape-data" # end point path + "/"
     req = requests.get(url)
     print(req.json())
 
 def trigger_predictor():
-    url = f"http://{PREDICTOR_ENDPOINT}:{PREDICTOR_PORT}" # end point path + "/"
+    url = f"http://{PREDICTOR_ENDPOINT}:{PREDICTOR_PORT}" + "/predict-and-insert" # end point path + "/"
     req = requests.get(url)
     print(req.json())
 
 dag = DAG(dag_id='pipline_dag', 
           default_args=args, 
-          schedule_interval='*/1 * * * *', # run every 1 minute for hourly, use '@hourly'
+          schedule_interval= '@hourly',#'*/1 * * * *', # run every 1 minute for hourly, use '@hourly'
           description='Data Pipeline for Data Science Project 2', 
           catchup=False) 
 

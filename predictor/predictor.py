@@ -64,8 +64,8 @@ def get_latest_data(station_id:str):
 
 
 # api for get lastest data -> inference the data -> insert prediction's result to database
-@app.post("/predict-and-post")
-async def predict_and_post():
+@app.get("/predict-and-insert")
+async def predict_and_insert():
     # for loop each station
     # prepare data for predict
     data = get_latest_data("1")  
