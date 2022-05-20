@@ -57,3 +57,4 @@ with dag:
     )
     
     scraping >> predicting
+    
