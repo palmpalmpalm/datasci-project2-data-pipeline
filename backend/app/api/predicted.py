@@ -25,4 +25,5 @@ async def get_all_predicted_data(db:Session = Depends(get_db)):
 
 @router.get("/latest-by-station/stations/{station_id}")
 async def get_latest_predicted_data_by_station(station_id:str, db:Session = Depends(get_db)):
-    return get_latest_predicted_by_station(station_id, db)
+    return get_latest_predicted_by_station(24, station_id, db)
+

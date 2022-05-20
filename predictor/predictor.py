@@ -30,12 +30,15 @@ TS = 72
 # Demo model class
 class Model:
     def __init__(self) -> None:
-        print(os.getcwd())
         self.scaler = joblib.load('./data/scaler.save')
+        self.yscaler = joblib.load('./data/yscaler.save')
         self.model = keras.models.load_model('./data/my_model.h5')
 
     def transform(self, data):
         return self.scaler.transform(data)
+    
+    def inverse_transform(self, data):
+        return self.yscaler.inverse_transform(data)
     
     def predict(self, data):
         return self.model.predict(data)
@@ -54,7 +57,7 @@ def get_latest_data(station_id:str):
     url = API_URL + "/cleaned_earthnull/latest-by-station/stations/"
     url += station_id + "/limits/" + str(TS) # get latest 72 time stamps
     req = requests.get(url=url)
-    return req.json()
+    return req
 
 
 # api for get lastest data -> inference the data -> insert prediction's result to database
@@ -62,12 +65,32 @@ def get_latest_data(station_id:str):
 async def predict_and_post():
     # for loop each station
     # prepare data for predict
-    data = get_latest_data("1")    
-    df = pd.DataFrame(data)
+    data = get_latest_data("1")  
+    if (data == ""):
+        return status.HTTP_417_EXPECTATION_FAILED    
     
-    print(df.head(), df.shape)
-    if (df.shape[0] == 0):
-        return status.HTTP_417_EXPECTATION_FAILED
+    df = pd.DataFrame(data.json())
+    print(df.shape)
+    
+    if (df.shape[0] < 72):
+        return status.HTTP_406_NOT_ACCEPTABLE
+    
+    predicted_desc = {
+        "predicted_station_id": "string",
+        "predicted_start_time": "2022-05-20T12:07:28.364Z",
+        "predicted_timestamp": "2022-05-20T12:07:28.364Z",
+        "predicted_interval_length": 0,
+        "predicted_n_interval": 0,
+        "predicted_lat": 0,
+        "predicted_long": 0,
+        "predicted_result": "string"
+    }
+    
+    df_present = df.iloc[0]
+    df_last = df.iloc[71]
+    print(df_present)
+    print(df_last)
+
     
     df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
                       'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
@@ -75,11 +98,12 @@ async def predict_and_post():
     df_scale = model.transform(df_selected)      
     
     df_format = np.array([df_scale])
-    print(df_format.shape)
     
     predicted = model.predict(df_format)
     
-    print(predicted.shape)
+    result = model.inverse_transform(predicted.reshape(-1, 1))
+    
+    print(result)
     
     # insert_data(predicted)
     
