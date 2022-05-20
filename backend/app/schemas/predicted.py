@@ -16,4 +16,4 @@ class PredictedAttribute(PredictedBase):
     predicted_n_interval : Optional[int] = None
     predicted_lat : Optional[float] = None
     predicted_long : Optional[float] = None
-    predicted_result : Optional[str] = None
+    predicted_result : Optional[float] = None
