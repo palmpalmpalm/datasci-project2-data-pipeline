@@ -49,13 +49,13 @@ class Model:
 # Init model
 model = Model()
 
-# insert prediction result to database
+# Insert prediction result to database
 def insert_data(data):
     url = API_URL + "/predicted/insert"
     res = requests.post(url=url, json=data)
     print(res.json())
 
-# get latest data
+# Get latest data
 def get_latest_data(station_id:str):
     url = API_URL + "/cleaned_earthnull/latest-by-station/stations/"
     url += station_id + "/limits/" + str(TS) # get latest 72 time stamps
@@ -63,37 +63,40 @@ def get_latest_data(station_id:str):
     return req
 
 
-# api for get lastest data -> inference the data -> insert prediction's result to database
+# Api for get lastest data -> Inference the data -> Insert prediction's result to database
 @app.get("/predict-and-insert")
 async def predict_and_insert():
-    # for loop each station
+    # For loop each station
     
     for station_id in range(1, 30):
         
-        # prepare data for predict
+        # Prepare data for predict
         data = get_latest_data(str(station_id))  
         if (data == ""):
             return status.HTTP_417_EXPECTATION_FAILED    
         
+        # Create dataframe 
         df = pd.DataFrame(data.json())
         
         if (df.shape[0] < 72):
             return status.HTTP_406_NOT_ACCEPTABLE
         
-        # get present data
+        # Get present data
         df_present = df.iloc[0]
         
         df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
                         'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
         
-        # inverse data since api gave desc order of data
-        df_selected_inverse = df_selected.reindex(index=data.index[::-1])
+        # Inverse data since api gave desc order of data
+        df_selected_inverse = df_selected.iloc[::-1]
         
-        # scale data with minmax scaler
+        # Scale data with minmax scaler
         df_scale = model.transform(df_selected_inverse)      
         
+        # Format data to np.array
         df_format = np.array([df_scale])
         
+        # Inferencing
         predicted = model.predict(df_format)
         
         result = model.inverse_transform(predicted)
@@ -114,7 +117,7 @@ async def predict_and_insert():
             }
             current_time += INTERVAL
             
-            # insert predicted data to database
+            # Insert predicted data to database
             insert_data(data_schema)
             
         return "Might be OK"
