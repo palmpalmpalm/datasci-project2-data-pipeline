@@ -29,13 +29,13 @@ args = {
     
 def trigger_scraper():
     # url = f"http://{SCRAPER_ENDPOINT}:{SCRAPER_PORT}" + "/scrape-data" # end point path + "/"
-    url = "http://localhost:9000" + "/scrape-data"
+    url = "http://host.docker.internal:9000" + "/scrape-data"
     req = requests.get(url)
     print(req.json())
 
 def trigger_predictor():
     # url = f"http://{PREDICTOR_ENDPOINT}:{PREDICTOR_PORT}" + "/predict-and-insert" # end point path + "/"
-    url = "http://localhost:7000/" + "/predict-and-insert"
+    url = "http://host.docker.internal:7000" + "/predict-and-insert"
     req = requests.get(url)
     print(req.json())
 

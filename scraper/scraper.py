@@ -27,7 +27,7 @@ API_PORT = os.environ.get("API_PORT")
 API_URL = f"{API_ENDPOINT}:{API_PORT}"
 
 # Init fastapi server
-app = FastAPI()
+app = FastAPI(title='Data Sciene Project 2 Scraper')
 
 class EarthNullBase(BaseModel):
     class Config:
