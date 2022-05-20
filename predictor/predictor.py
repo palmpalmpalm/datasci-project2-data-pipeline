@@ -23,7 +23,7 @@ API_URL = f"http://{API_ENDPOINT}:{API_PORT}"
 # API_URL = "http://localhost:8000"
 
 # Init fastapi server
-app = FastAPI()
+app = FastAPI(title='Data Sciene Project 2 Predictor')
 
 # Model constraints
 TS = 72
