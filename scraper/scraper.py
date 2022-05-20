@@ -14,9 +14,7 @@ from pydantic import BaseModel
 from sqlalchemy import null
 import pytz
 import uvicorn
-
-
-
+import requests
 
 # get data from .env
 dotenv_path = os.path.join(os.path.dirname(
@@ -62,16 +60,25 @@ def waiting(driver):
         
 
 def insert_scrape_data(data):
+    requests.adapters.DEFAULT_RETRIES = 100
+    s = requests.session()
+    s.keep_alive = False 
     url = 'http://localhost:8000/earthnull/insert'
     res = requests.post(url = url, json = data)
     return res.json()
 
 def insert_cleaned_data(data):
+    requests.adapters.DEFAULT_RETRIES = 100
+    s = requests.session()
+    s.keep_alive = False 
     url = 'http://localhost:8000/cleaned_earthnull/insert'
     res = requests.post(url = url, json = data)
     return res.json()
 
 def get_lastest(station_id):
+    requests.adapters.DEFAULT_RETRIES = 100
+    s = requests.session()
+    s.keep_alive = False 
     url = f'http://localhost:8000/cleaned_earthnull/latest-by-station/stations/{station_id}/limits/1'
     res = requests.get(url = url)
     return res.json()
@@ -305,4 +312,4 @@ async def scrape_data():
     return status_return
 
 if __name__ == "__main__":
-    uvicorn.run(app, port=8080, host='0.0.0.0')
+    uvicorn.run(app, port=9000, host='0.0.0.0')
