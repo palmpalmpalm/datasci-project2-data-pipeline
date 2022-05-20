@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import status
 from dotenv import load_dotenv
+from tensorflow import keras
 import requests
 import os
-import random
 import pandas as pd
-import sklearn
 import joblib
+import uvicorn
 
 # get data from .env
 dotenv_path = os.path.join(os.path.dirname(
@@ -22,17 +22,20 @@ API_URL = f"http://{API_ENDPOINT}:{API_PORT}"
 app = FastAPI()
 
 # Demo model class
-class DemoModel:
+class Model:
     def __init__(self) -> None:
-        # load weight here
-        self.name = 'demo model'
+        print(os.getcwd())
+        self.scaler = joblib.load('./data/scaler.save')
+        self.model = keras.models.load_model('./data/my_model.h5')
 
-    def predict(data):
-        # Real model should pass the data to the model
-        return random.uniform(0, 1)
+    def transform(self, data):
+        return self.scaler.transform(data)
+    
+    def predict(self, data):
+        return self.model.predict(data)
 
 # Init model
-demo_model = DemoModel()
+model = Model()
 
 # insert prediction result to database
 def insert_data(data):
@@ -54,16 +57,22 @@ def get_latest_data(stationid):
 async def predict_and_post():
     # for loop each station
     # prepare data for predict
-    data = get_latest_data()
+    data = get_latest_data()    
     df = pd.DataFrame(data)
+    
+    if (df.shape[0] == 0):
+        return status.HTTP_204_NO_CONTENT
+    
     df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
                       'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
-    scaler = joblib.load(
-        'datasci-project2-data-pipeline/predictor/data/scaler.save')
-    df_scale = scaler.transform(df_selected)
+    
+    df_scale = model.transform(df_selected)      
 
-    predicted = demo_model.predict(data)
+    predicted = model.predict(df_scale)
+    
+    #insert_data(model.predict(data))
+    
+    #return insert_data(model.predict(data))
 
-    insert_data(demo_model.predict(data))
-    #
-    return insert_data(demo_model.predict(data))
+if __name__ == "__main__":
+    uvicorn.run(app, port=7000, host='0.0.0.0')
