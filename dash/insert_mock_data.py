@@ -43,6 +43,7 @@ def insert_cleaned_earthnull_data(i, name, lat, long):
         "cleaned_earthnull_long": long,
         "cleaned_earthnull_pm25": random.randint(0, 100),
         "cleaned_earthnull_pm10": random.randint(0, 100),
+        "cleaned_earthnull_temp": random.randint(25, 40),
         "cleaned_earthnull_wind_dir": random.randint(0, 365),
         "cleaned_earthnull_wind_speed": random.randint(0, 200),
         "cleaned_earthnull_RH": random.randint(0, 100)
@@ -61,5 +62,5 @@ if __name__ == '__main__':
         for i in range(1, 6):
             # insert_earthnull_data(str(i), name[i], lat[i], long[i])
             insert_cleaned_earthnull_data(str(i), name[i], lat[i], long[i])
-        time.sleep(5)
+        time.sleep(2)
         print('xx')

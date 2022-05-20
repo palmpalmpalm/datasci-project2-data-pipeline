@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 import requests
 import os
 import random
+import pandas as pd
+import sklearn
+import joblib
 
 # get data from .env
 dotenv_path = os.path.join(os.path.dirname(
@@ -53,7 +56,8 @@ def insert_data(data):
 
 
 def get_latest_data(stationid):
-    url = 'http://localhost:8000/predicted/cleaned_earthnull/'+str(stationid)
+    url = 'http://localhost:8000/cleaned_earthnull/latest-by-station/stations/' + \
+        str(stationid)+'/limits/'+str(72)
     req = requests.get(url=url)
     print(len(req.json()))
     return req.json()
@@ -63,7 +67,15 @@ def get_latest_data(stationid):
 @app.post("/predict-and-post")
 async def predict_and_post():
     # for loop each station
+    # prepare data for predict
     data = get_latest_data()
+    df = pd.DataFrame(data)
+    df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
+                      'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
+    scaler = joblib.load(
+        'datasci-project2-data-pipeline/predictor/data/scaler.save')
+    df_scale = scaler.transform(df_selected)
+
     predicted = demo_model.predict(data)
 
     insert_data(demo_model.predict(data))
