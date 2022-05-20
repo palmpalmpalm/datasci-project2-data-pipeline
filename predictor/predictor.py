@@ -9,6 +9,7 @@ import joblib
 import numpy as np
 from datetime import timedelta
 from datetime import datetime
+from dateutil import parser
 
 # Get data from .env
 dotenv_path = os.path.join('.env')
@@ -22,17 +23,19 @@ API_URL = f"http://{API_ENDPOINT}:{API_PORT}"
 # API_URL = "http://localhost:8000"
 
 # Init fastapi server
-app = FastAPI()
+app = FastAPI(title='Data Sciene Project 2 Predictor')
 
 # Model constraints
 TS = 72
+INTERVAL = timedelta(hours=1)
+N_INTERVALS = 24
 
 # Demo model class
 class Model:
     def __init__(self) -> None:
-        self.scaler = joblib.load('./data/scaler.save')
-        self.yscaler = joblib.load('./data/yscaler.save')
-        self.model = keras.models.load_model('./data/my_model.h5')
+        self.scaler = joblib.load('./data/scaler2.save')
+        self.yscaler = joblib.load('./data/yscaler2.save')
+        self.model = keras.models.load_model('./data/my_model2.h5')
 
     def transform(self, data):
         return self.scaler.transform(data)
@@ -48,8 +51,8 @@ model = Model()
 
 # insert prediction result to database
 def insert_data(data):
-    url = API_URL + "/predict/insert"
-    res = requests.post(url=url, json=data.json())
+    url = API_URL + "/predicted/insert"
+    res = requests.post(url=url, json=data)
     print(res.json())
 
 # get latest data
@@ -61,50 +64,53 @@ def get_latest_data(station_id:str):
 
 
 # api for get lastest data -> inference the data -> insert prediction's result to database
-@app.post("/predict-and-post")
-async def predict_and_post():
+@app.get("/predict-and-insert")
+async def predict_and_insert():
     # for loop each station
-    # prepare data for predict
-    data = get_latest_data("1")  
-    if (data == ""):
-        return status.HTTP_417_EXPECTATION_FAILED    
     
-    df = pd.DataFrame(data.json())
-    print(df.shape)
-    
-    if (df.shape[0] < 72):
-        return status.HTTP_406_NOT_ACCEPTABLE
-    
-    predicted_desc = {
-        "predicted_station_id": "string",
-        "predicted_start_time": "2022-05-20T12:07:28.364Z",
-        "predicted_timestamp": "2022-05-20T12:07:28.364Z",
-        "predicted_interval_length": 0,
-        "predicted_n_interval": 0,
-        "predicted_lat": 0,
-        "predicted_long": 0,
-        "predicted_result": "string"
-    }
-    
-    df_present = df.iloc[0]
-    df_last = df.iloc[71]
-    print(df_present)
-    print(df_last)
+    for station_id in range(1, 30):
+        
+        # prepare data for predict
+        data = get_latest_data(str(station_id))  
+        if (data == ""):
+            return status.HTTP_417_EXPECTATION_FAILED    
+        
+        df = pd.DataFrame(data.json())
+        
+        if (df.shape[0] < 72):
+            return status.HTTP_406_NOT_ACCEPTABLE
+        
+        df_present = df.iloc[0]
+        
+        df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
+                        'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
+        
+        # scale data with minmax scaler
+        df_scale = model.transform(df_selected)      
+        
+        df_format = np.array([df_scale])
+        
+        predicted = model.predict(df_format)
+        
+        result = model.inverse_transform(predicted)
 
-    
-    df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
-                      'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
-    
-    df_scale = model.transform(df_selected)      
-    
-    df_format = np.array([df_scale])
-    
-    predicted = model.predict(df_format)
-    
-    result = model.inverse_transform(predicted.reshape(-1, 1))
-    
-    print(result)
-    
-    # insert_data(predicted)
-    
-    #return insert_data(model.predict(data))
+        start_time = parser.parse(df_present['cleaned_earthnull_timestamp'])
+        current_time = parser.parse(df_present['cleaned_earthnull_timestamp'])
+
+        for i in range(N_INTERVALS):
+            data_schema = {
+                "predicted_station_id": df_present["cleaned_earthnull_station_id"],
+                "predicted_start_time": str(start_time),
+                "predicted_timestamp": str(current_time),
+                "predicted_interval_length": str(INTERVAL),
+                "predicted_n_interval": N_INTERVALS,
+                "predicted_lat": df_present["cleaned_earthnull_lat"],
+                "predicted_long": df_present["cleaned_earthnull_long"],
+                "predicted_result": float(result[0, i])
+            }
+            current_time += INTERVAL
+            
+            # insert predicted data to database
+            insert_data(data_schema)
+            
+        return "Might be OK"

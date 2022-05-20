@@ -1,8 +1,8 @@
-version: "3"
+version: "3.7"
 
 services:
   selenium:
-    images: selenium/standalone-chrome
+    build:
+      context: .
     ports:
-      - 4444:4444
-    restart: always
+      - 9000:9000
