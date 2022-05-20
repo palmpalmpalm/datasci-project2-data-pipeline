@@ -33,9 +33,9 @@ N_INTERVALS = 24
 # Demo model class
 class Model:
     def __init__(self) -> None:
-        self.scaler = joblib.load('./data/scaler.save')
-        self.yscaler = joblib.load('./data/yscaler.save')
-        self.model = keras.models.load_model('./data/my_model.h5')
+        self.scaler = joblib.load('./data/scaler2.save')
+        self.yscaler = joblib.load('./data/yscaler2.save')
+        self.model = keras.models.load_model('./data/my_model2.h5')
 
     def transform(self, data):
         return self.scaler.transform(data)
