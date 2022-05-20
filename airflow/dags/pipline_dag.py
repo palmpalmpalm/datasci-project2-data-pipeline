@@ -8,18 +8,19 @@ import random
 from dotenv import load_dotenv
 
 
-dotenv_path = os.path.join('.env')
-load_dotenv(dotenv_path)
+# load_dotenv('../airflow/.env')
 
-POSTGRES_USER=os.environ.get("POSTGRES_USER")
-POSTGRES_PASSWORD=os.environ.get("POSTGRES_PASSWORD")
-POSTGRES_DB=os.environ.get("POSTGRES_DB")
+SCRAPER_ENDPOINT="host.docker.internal"
+SCRAPER_PORT="9000"
 
-SCRAPER_ENDPOINT=os.environ.get("SCRAPER_ENDPOINT")
-SCRAPER_PORT=os.environ.get("SCRAPER_PORT")
+PREDICTOR_ENDPOINT="host.docker.internal"
+PREDICTOR_PORT="7000"
 
-PREDICTOR_ENDPOINT=os.environ.get("PREDICTOR_ENDPOINT")
-PREDICTOR_PORT=os.environ.get("PREDICTOR_PORT")
+# SCRAPER_ENDPOINT=os.environ.get("SCRAPER_ENDPOINT")
+# SCRAPER_PORT=os.environ.get("SCRAPER_PORT")
+
+# PREDICTOR_ENDPOINT=os.environ.get("PREDICTOR_ENDPOINT")
+# PREDICTOR_PORT=os.environ.get("PREDICTOR_PORT")
 
 args = {
     'owner' : 'datasci-project2',
@@ -27,12 +28,14 @@ args = {
 }
     
 def trigger_scraper():
-    url = f"http://{SCRAPER_ENDPOINT}:{SCRAPER_PORT}" + "/scrape-data" # end point path + "/"
+    # url = f"http://{SCRAPER_ENDPOINT}:{SCRAPER_PORT}" + "/scrape-data" # end point path + "/"
+    url = "http://localhost:9000" + "/scrape-data"
     req = requests.get(url)
     print(req.json())
 
 def trigger_predictor():
-    url = f"http://{PREDICTOR_ENDPOINT}:{PREDICTOR_PORT}" + "/predict-and-insert" # end point path + "/"
+    # url = f"http://{PREDICTOR_ENDPOINT}:{PREDICTOR_PORT}" + "/predict-and-insert" # end point path + "/"
+    url = "http://localhost:7000/" + "/predict-and-insert"
     req = requests.get(url)
     print(req.json())
 

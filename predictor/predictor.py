@@ -67,48 +67,50 @@ def get_latest_data(station_id:str):
 @app.get("/predict-and-insert")
 async def predict_and_insert():
     # for loop each station
-    # prepare data for predict
-    data = get_latest_data("1")  
-    if (data == ""):
-        return status.HTTP_417_EXPECTATION_FAILED    
     
-    df = pd.DataFrame(data.json())
-    
-    if (df.shape[0] < 72):
-        return status.HTTP_406_NOT_ACCEPTABLE
-    
-    df_present = df.iloc[0]
-    
-    df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
-                      'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
-    
-    # scale data with minmax scaler
-    df_scale = model.transform(df_selected)      
-    
-    df_format = np.array([df_scale])
-    
-    predicted = model.predict(df_format)
-    
-    result = model.inverse_transform(predicted)
-
-    start_time = parser.parse(df_present['cleaned_earthnull_timestamp'])
-    current_time = parser.parse(df_present['cleaned_earthnull_timestamp'])
-
-    for i in range(N_INTERVALS):
-        data_schema = {
-            "predicted_station_id": df_present["cleaned_earthnull_station_id"],
-            "predicted_start_time": str(start_time),
-            "predicted_timestamp": str(current_time),
-            "predicted_interval_length": str(INTERVAL),
-            "predicted_n_interval": N_INTERVALS,
-            "predicted_lat": df_present["cleaned_earthnull_lat"],
-            "predicted_long": df_present["cleaned_earthnull_long"],
-            "predicted_result": float(result[0, i])
-        }
-        current_time += INTERVAL
+    for station_id in range(1, 30):
         
-        # insert predicted data to database
-        insert_data(data_schema)
+        # prepare data for predict
+        data = get_latest_data(station_id)  
+        if (data == ""):
+            return status.HTTP_417_EXPECTATION_FAILED    
         
-    return "Might be OK"
-    #return insert_data(model.predict(data))
+        df = pd.DataFrame(data.json())
+        
+        if (df.shape[0] < 72):
+            return status.HTTP_406_NOT_ACCEPTABLE
+        
+        df_present = df.iloc[0]
+        
+        df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
+                        'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
+        
+        # scale data with minmax scaler
+        df_scale = model.transform(df_selected)      
+        
+        df_format = np.array([df_scale])
+        
+        predicted = model.predict(df_format)
+        
+        result = model.inverse_transform(predicted)
+
+        start_time = parser.parse(df_present['cleaned_earthnull_timestamp'])
+        current_time = parser.parse(df_present['cleaned_earthnull_timestamp'])
+
+        for i in range(N_INTERVALS):
+            data_schema = {
+                "predicted_station_id": df_present["cleaned_earthnull_station_id"],
+                "predicted_start_time": str(start_time),
+                "predicted_timestamp": str(current_time),
+                "predicted_interval_length": str(INTERVAL),
+                "predicted_n_interval": N_INTERVALS,
+                "predicted_lat": df_present["cleaned_earthnull_lat"],
+                "predicted_long": df_present["cleaned_earthnull_long"],
+                "predicted_result": float(result[0, i])
+            }
+            current_time += INTERVAL
+            
+            # insert predicted data to database
+            insert_data(data_schema)
+            
+        return "Might be OK"
