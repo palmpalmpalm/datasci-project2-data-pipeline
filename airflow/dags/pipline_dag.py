@@ -8,8 +8,7 @@ import random
 from dotenv import load_dotenv
 
 
-dotenv_path = os.path.join(os.path.dirname(
-    os.path.dirname(os.path.dirname(__file__))), '.env')
+dotenv_path = os.path.join('.env')
 load_dotenv(dotenv_path)
 
 POSTGRES_USER=os.environ.get("POSTGRES_USER")
