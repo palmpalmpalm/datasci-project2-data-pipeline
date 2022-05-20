@@ -71,7 +71,7 @@ async def predict_and_insert():
     for station_id in range(1, 30):
         
         # prepare data for predict
-        data = get_latest_data(station_id)  
+        data = get_latest_data(str(station_id))  
         if (data == ""):
             return status.HTTP_417_EXPECTATION_FAILED    
         
