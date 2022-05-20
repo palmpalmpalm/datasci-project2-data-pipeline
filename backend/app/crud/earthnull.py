@@ -6,16 +6,19 @@ from datetime import datetime
 
 
 def insert_earthnull(request:EarthNullAttribute, db:Session):
-    db_earthnull = EarthNull(earthnull_station_id = request.earthnull_station_id,
-                       earthnull_timestamp = request.earthnull_timestamp,
-                       earthnull_lat = request.earthnull_lat,
-                       earthnull_long = request.earthnull_long,
-                       earthnull_pm25 = request.earthnull_pm25,
-                       earthnull_pm10 = request.earthnull_pm10,
-                       earthnull_temp = request.earthnull_temp,
-                       earthnull_wind_dir = request.earthnull_wind_dir,
-                       earthnull_wind_speed = request.earthnull_wind_speed,
-                       earthnull_RH = request.earthnull_RH)
+    db_earthnull = EarthNull(earthnull_timestamp = request.earthnull_timestamp,
+                        earthnull_station_id = request.earthnull_station_id,
+                        earthnull_station_name = request.earthnull_station_name,
+                        earthnull_region = request.earthnull_region,
+                        earthnull_province = request.earthnull_province, 
+                        earthnull_lat = request.earthnull_lat,
+                        earthnull_long = request.earthnull_long,
+                        earthnull_pm25 = request.earthnull_pm25,
+                        earthnull_pm10 = request.earthnull_pm10,
+                        earthnull_temp = request.earthnull_temp,
+                        earthnull_wind_dir = request.earthnull_wind_dir,
+                        earthnull_wind_speed = request.earthnull_wind_speed,
+                        earthnull_RH = request.earthnull_RH)
     db.add(db_earthnull)
     db.commit()
     db.refresh(db_earthnull)

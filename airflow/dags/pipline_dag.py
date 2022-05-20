@@ -8,8 +8,7 @@ import random
 from dotenv import load_dotenv
 
 
-dotenv_path = os.path.join(os.path.dirname(
-    os.path.dirname(os.path.dirname(__file__))), '.env')
+dotenv_path = os.path.join('.env')
 load_dotenv(dotenv_path)
 
 POSTGRES_USER=os.environ.get("POSTGRES_USER")
@@ -45,12 +44,12 @@ dag = DAG(dag_id='pipline_dag',
 
 with dag:
     scraping = PythonOperator(
-        task_id = 'Scrape data from websites and insert them to database',
+        task_id = 'scrape_data',
         python_callable = trigger_scraper,    
     )
     
     predicting = PythonOperator(
-        task_id = 'Predict future PM2.5 with cleaned data and insert them to database',
+        task_id = 'predict_pm25',
         python_callable = trigger_predictor,
     )
     
