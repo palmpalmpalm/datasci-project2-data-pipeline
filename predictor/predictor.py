@@ -6,9 +6,11 @@ import requests
 import os
 import pandas as pd
 import joblib
-import uvicorn
+import numpy as np
+from datetime import timedelta
+from datetime import datetime
 
-# get data from .env
+# Get data from .env
 dotenv_path = os.path.join(os.path.dirname(
     os.path.dirname(os.path.dirname(__file__))), '.env')
 load_dotenv(dotenv_path)
@@ -16,10 +18,15 @@ load_dotenv(dotenv_path)
 API_ENDPOINT = os.environ.get("API_ENDPOINT")
 API_PORT = os.environ.get("API_PORT")
 
-API_URL = f"http://{API_ENDPOINT}:{API_PORT}"
+# Create database endpoint from .env
+# API_URL = f"http://{API_ENDPOINT}:{API_PORT}"
+API_URL = "http://localhost:8000"
 
 # Init fastapi server
 app = FastAPI()
+
+# Model constraints
+TS = 72
 
 # Demo model class
 class Model:
@@ -39,16 +46,15 @@ model = Model()
 
 # insert prediction result to database
 def insert_data(data):
-    url = API_ENDPOINT + "/predict/insert"
+    url = API_URL + "/predict/insert"
     res = requests.post(url=url, json=data.json())
     print(res.json())
 
 # get latest data
-def get_latest_data(stationid):
-    url = API_ENDPOINT + "/cleaned_earthnull/latest-by-station/stations/"
-    url +=  str(stationid)+'/limits/'+str(72)
+def get_latest_data(station_id:str):
+    url = API_URL + "/cleaned_earthnull/latest-by-station/stations/"
+    url += station_id + "/limits/" + str(TS) # get latest 72 time stamps
     req = requests.get(url=url)
-    print(len(req.json()))
     return req.json()
 
 
@@ -57,22 +63,25 @@ def get_latest_data(stationid):
 async def predict_and_post():
     # for loop each station
     # prepare data for predict
-    data = get_latest_data()    
+    data = get_latest_data("1")    
     df = pd.DataFrame(data)
     
+    print(df.head(), df.shape)
     if (df.shape[0] == 0):
-        return status.HTTP_204_NO_CONTENT
+        return status.HTTP_417_EXPECTATION_FAILED
     
     df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
                       'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
     
     df_scale = model.transform(df_selected)      
-
-    predicted = model.predict(df_scale)
     
-    #insert_data(model.predict(data))
+    df_format = np.array([df_scale])
+    print(df_format.shape)
+    
+    predicted = model.predict(df_format)
+    
+    print(predicted.shape)
+    
+    # insert_data(predicted)
     
     #return insert_data(model.predict(data))
-
-if __name__ == "__main__":
-    uvicorn.run(app, port=7000, host='0.0.0.0')
