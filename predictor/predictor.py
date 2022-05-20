@@ -80,13 +80,17 @@ async def predict_and_insert():
         if (df.shape[0] < 72):
             return status.HTTP_406_NOT_ACCEPTABLE
         
+        # get present data
         df_present = df.iloc[0]
         
         df_selected = df[['cleaned_earthnull_temp', 'cleaned_earthnull_wind_speed', 'cleaned_earthnull_wind_dir',
                         'cleaned_earthnull_RH', 'cleaned_earthnull_pm25', 'cleaned_earthnull_station_id']]
         
+        # inverse data since api gave desc order of data
+        df_selected_inverse = df_selected.reindex(index=data.index[::-1])
+        
         # scale data with minmax scaler
-        df_scale = model.transform(df_selected)      
+        df_scale = model.transform(df_selected_inverse)      
         
         df_format = np.array([df_scale])
         
